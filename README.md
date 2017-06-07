@@ -1,2 +1,2 @@
 # SpringerLink-csv2bib
-The search results in the Spring Link library only allows you to export csv files. But researchers needs bibtex files to import.
+Convert the search results (csv file) from the Spring Link library to export bibtex file.
