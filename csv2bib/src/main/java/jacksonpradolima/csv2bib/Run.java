@@ -17,134 +17,89 @@
 package jacksonpradolima.csv2bib;
 
 import com.beust.jcommander.JCommander;
+import jacksonpradolima.csv2bib.utils.BibTex;
 import jacksonpradolima.csv2bib.utils.CsvReader;
-import java.io.BufferedReader;
+import jacksonpradolima.csv2bib.utils.DigitalLibraries;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.UncheckedIOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import me.tongfei.progressbar.ProgressBar;
-import me.tongfei.progressbar.ProgressBarStyle;
+import java.util.stream.Collectors;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Class to parse csv file from SpringerLink to bib file.
+ * Class to parse csv file to bib file using DOI as key to get bibtex
+ * informations.
  *
  * @author Jackson A. Prado Lima <jacksonpradolima at gmail.com>
  */
 public class Run {
 
+    /**
+     * Logger
+     */
     private static final Logger logger = LoggerFactory.getLogger(Run.class);
 
-    private static final String url_export_citation = "https://citation-needed.springer.com/v2/references/%s?format=bibtex&flavour=citation";
-    private static final Charset ENCODING = StandardCharsets.UTF_8;
+    /**
+     * The output file is generated with the same name that the input file, but
+     * with the extension .bib
+     */
     private static String output_file = "";
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        logger.info("Converting .csv to .bib");
-        RunCommands jct = new RunCommands();
-        JCommander jCommander = new JCommander(jct, args);
-
-        if (jct.help) {
-            jCommander.usage();
-            return;
-        }
-
-        CsvReader csvReader = createCsvReader(jct.fileIn);
-        List<String> header = csvReader.readHeader();
-        List<List<String>> records = csvReader.readRecords();
-
-        if (records.isEmpty()) {
-            logger.error("Empty file.");
-            System.exit(-1);
-        }
-
-        logger.info("Found: " + records.size() + " citations");
-
-        List<String> urls = new ArrayList();
-
-        int indexDoi = header.indexOf("Item DOI");
-
-        records.stream().forEach(record -> {
-            try {
-                String url = String.format(url_export_citation, record.get(indexDoi)).replace("\"", "");
-                if (!url.isEmpty()) {
-                    urls.add(url);
-                }
-            } catch (Exception e) {
-                logger.error("Error in get citation from url.", e);
-            }
-        });
-
-        if (urls.isEmpty()) {
-            logger.error("Urls not found.");
-            System.exit(-1);
-        }
-
         try {
-            List<String> bibs = getBibText(urls);
-            logger.info("Generating .bib file");
-            Path path = Paths.get(output_file, new String[0]);
-            Files.write(path, bibs, ENCODING, new java.nio.file.OpenOption[0]);
-            logger.info("The file was generated with successfull!");
-        } catch (IOException e) {
-            logger.info("Error in to generate .bib file.", e);
-        }
-    }
+            RunCommands jct = new RunCommands();
+            JCommander jCommander = new JCommander(jct, args);
 
-    static List<String> getBibText(List<String> urls) {
-        ProgressBar pb = new ProgressBar("[csv2bib]", urls.size(), 1000, System.out, ProgressBarStyle.UNICODE_BLOCK)
-                .start()
-                .maxHint(urls.size());
-
-        List<String> bibs = new ArrayList();
-
-        URL uri;
-        for (String strUrl : urls) {
-            try {
-                uri = new URL(strUrl);
-                URLConnection ec = uri.openConnection();
-
-                try (BufferedReader in = new BufferedReader(new java.io.InputStreamReader(ec.getInputStream(), ENCODING))) {
-
-                    StringBuilder a = new StringBuilder();
-                    String inputLine;
-                    while ((inputLine = in.readLine()) != null) {
-                        a.append(inputLine).append("\n");
-                    }
-                    logger.debug(a.toString());
-                    bibs.add(a.toString());
-                } catch (IOException ex) {
-                    throw ex;
-                }
-
-                pb.step();
-                pb.setExtraMessage("Getting BibText informations...");
-            } catch (MalformedURLException ex) {
-                logger.error("Invalid url: " + strUrl, ex);
-            } catch (IOException ex) {
-                logger.error("Error to get file at " + strUrl, ex);
+            if (jct.help) {
+                jCommander.usage();
+                return;
             }
+
+            // Read the csv file
+            List<List<String>> records = createCsvReader(jct.fileIn).readRecords(jct.header);
+
+            if (records.isEmpty()) {
+                throw new Exception("Empty file.");                
+            }
+
+            DigitalLibraries digitalLibray = DigitalLibraries.getEnum(jct.digitalLibrary);
+
+            // Generate the urls
+            List<String> urls = records.parallelStream()
+                    .map(m -> String.format(digitalLibray.getUrl(), m.get(jct.doiIndex)).replace("\"", ""))
+                    .collect(Collectors.toList());
+
+            if (urls.isEmpty()) {
+                throw new Exception("Urls not found.");                
+            }
+            
+            try {
+                // Get bibtex informations and generate bib file
+                Files.write(Paths.get(output_file), BibTex.getBibTextFromDigitalLibrary(urls), StandardCharsets.UTF_8);
+            } catch (IOException e) {
+                throw new Exception("Error in to generate .bib file.", e);
+            }
+        }catch(UncheckedIOException e){
+            logger.error("Error when tried to read the csv file.", e);
+        } catch (Exception ex) {
+            logger.error(ex.getMessage());
         }
-
-        pb.stop();
-
-        return bibs;
     }
 
+    /**
+     * Wrapper to read a csv
+     *
+     * @param file
+     * @return
+     */
     static CsvReader createCsvReader(String file) {
         try {
             Path path = Paths.get(file);
@@ -156,30 +111,4 @@ public class Run {
             throw new UncheckedIOException(e);
         }
     }
-
-    private static void printProgress(long startTime, long total, long current) {
-        long eta = current == 0 ? 0
-                : (total - current) * (System.currentTimeMillis() - startTime) / current;
-
-        String etaHms = current == 0 ? "N/A"
-                : String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(eta),
-                        TimeUnit.MILLISECONDS.toMinutes(eta) % TimeUnit.HOURS.toMinutes(1),
-                        TimeUnit.MILLISECONDS.toSeconds(eta) % TimeUnit.MINUTES.toSeconds(1));
-
-        StringBuilder string = new StringBuilder(140);
-        int percent = (int) (current * 100 / total);
-        string
-                .append('\r')
-                .append(String.join("", Collections.nCopies(percent == 0 ? 2 : 2 - (int) (Math.log10(percent)), " ")))
-                .append(String.format(" %d%% [", percent))
-                .append(String.join("", Collections.nCopies(percent, "=")))
-                .append('>')
-                .append(String.join("", Collections.nCopies(100 - percent, " ")))
-                .append(']')
-                .append(String.join("", Collections.nCopies((int) (Math.log10(total)) - (int) (Math.log10(current)), " ")))
-                .append(String.format(" %d/%d, ETA: %s", current, total, etaHms));
-
-        System.out.print(string);
-    }
-
 }

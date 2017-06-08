@@ -1,14 +1,7 @@
 package jacksonpradolima.csv2bib.utils;
 
 import java.io.BufferedReader;
-import static java.io.File.separator;
-import java.io.IOException;
 import java.io.Reader;
-import java.io.UncheckedIOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +23,7 @@ import java.util.stream.Collectors;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- *
+ * CSV Reader
  * @author Jackson A. Prado Lima <jacksonpradolima at gmail.com>
  */
 public class CsvReader {
@@ -55,9 +48,17 @@ public class CsvReader {
 
     public List<List<String>> readRecords() {
         return reader.lines()
-                .skip(readedHeader ? 0 : 1)
+                .skip(readedHeader ? 0 : 1)                
+                .parallel()
                 .map(line -> Arrays.asList(line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)")))
                 .collect(Collectors.toList());
     }
 
+    public List<List<String>> readRecords(boolean skipReader) {
+        if (!readedHeader && skipReader) {
+            readedHeader = true;
+        }
+
+        return readRecords();
+    }
 }

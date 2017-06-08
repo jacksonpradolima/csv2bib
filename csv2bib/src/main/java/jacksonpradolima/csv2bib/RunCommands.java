@@ -29,6 +29,15 @@ public class RunCommands {
     @Parameter(names = {"-help", "-h"}, help = true)
     public boolean help;
 
-    @Parameter(names = {"-fileIn", "-fi"}, description = "Input File")
+    @Parameter(names = {"-fileIn", "-fi"}, description = "Input File", required = true)
     public String fileIn;
+
+    @Parameter(names = {"-dl"}, description = "Digital Library", required = true)
+    public String digitalLibrary;
+
+    @Parameter(names = {"-doiIndex"}, description = "DOI index", required = true)
+    public int doiIndex;
+
+    @Parameter(names = {"-header"}, description = "Contains header?", arity = 1)
+    public boolean header;
 }

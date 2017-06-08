@@ -31,14 +31,14 @@ public class RunTest {
 
     @Test
     public void testSomeMethod() {
-//        String[] args = new String[]{"-fi=src/test/resources/SpringerLink.csv"};
-//        try {
-//            Main.main(args);
-//            assertTrue(true);
-//        } catch (IOException | InterruptedException e) {
-//            e.printStackTrace();
-//            assertTrue(false);
-//        }
+        String[] args = new String[]{"-fi=src/test/resources/SpringerLink.csv", "-dl=SpringerLink", "-doiIndex=5"};
+        try {
+            Run.main(args);
+            assertTrue(true);
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            assertTrue(false);
+        }
     }
 
 }
