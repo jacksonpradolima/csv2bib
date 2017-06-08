@@ -1,6 +1,3 @@
-# SpringerLink-csv2bib
-
-
 # csv2bib
 In some digital libraries, e. g. SpringerLink, the search results are available only in csv file, but the researches need in other formats like bibtex. In this sense, this project was created to help the researchers converting csv file into bib file.
 
