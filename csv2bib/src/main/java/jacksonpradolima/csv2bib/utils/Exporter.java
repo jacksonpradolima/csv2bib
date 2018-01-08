@@ -63,12 +63,12 @@ public interface Exporter {
 	
 	
 	/**
-	 * File for write results
+	 * File name with extension for write results
 	 * 
 	 * @return
 	 */
 	default String toFileName() {
-		return FilenameUtils.getBaseName(getOutputFile().toString() + getExtension().getFormat());
+		return String.format("%s.%s", FilenameUtils.getBaseName(getOutputFile().toString()), getExtension().toString());
 	}
 
 	/**
