@@ -47,5 +47,4 @@ where you must change *version* with the a version available
 **-extension**: Extension for exporter references, can use (bib or ris). (optional, default bib) 
 
 ## Digital Libraries available
-- DOI (Get the bibtex informations using crossref - this option is not so recommended)
 - SpringerLink
