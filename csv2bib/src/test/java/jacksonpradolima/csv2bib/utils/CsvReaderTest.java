@@ -16,23 +16,23 @@
  */
 package jacksonpradolima.csv2bib.utils;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.UncheckedIOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
+
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+
 import org.junit.Test;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
-import static org.hamcrest.MatcherAssert.assertThat;
+
+import jacksonpradolima.csv2bib.reader.CsvReader;
 
 public class CsvReaderTest {
 
     @Test
-    public void readsHeader() {
+    public void readsHeader() throws URISyntaxException {
         CsvReader csvReader = createCsvReader();
         List<String> header = csvReader.readHeader();
 
@@ -41,19 +41,14 @@ public class CsvReaderTest {
     }
 
     @Test
-    public void readsRecords() {
+    public void readsRecords() throws Exception {
         CsvReader csvReader = createCsvReader();
-        List<List<String>> records = csvReader.readRecords();        
+        List<List<String>> records = csvReader.readAllRecords();        
         assertThat(records, hasSize(343));
     }
 
-    private CsvReader createCsvReader() {
-        try {
-            Path path = Paths.get("src/test/resources", "SpringerLink.csv");
-            Reader reader = Files.newBufferedReader(path, Charset.forName("UTF-8"));
-            return new CsvReader(reader);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
+	private CsvReader createCsvReader() throws URISyntaxException {
+		Path path = Paths.get("src/test/resources/SpringerLink.csv");
+		return CsvReader.getInstance(path.toString(), 5);
+	}
 }

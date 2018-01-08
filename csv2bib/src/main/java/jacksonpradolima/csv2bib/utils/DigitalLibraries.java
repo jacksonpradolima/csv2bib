@@ -16,60 +16,48 @@
  */
 package jacksonpradolima.csv2bib.utils;
 
-import java.util.Objects;
+import java.util.Arrays;
+
+import org.apache.commons.lang3.StringUtils;
+
+import jacksonpradolima.csv2bib.library.Library;
+import jacksonpradolima.csv2bib.library.SpringerLink;
 
 /**
- * Digital Libraries with the respective urls to get bibtex informations
+ * Digital Libraries with the respective urls to exporter informations
+ * 
  * @author Jackson A. Prado Lima <jacksonpradolima at gmail.com>
+ * 
+ * @author Fernando S. Godóy <fernandogodoy18@gmail.com>
  */
 public enum DigitalLibraries {
 
-    DOI("DOI", "http://dx.doi.org/%s"),
-    SPRINGER_LINK("SpringerLink", "https://citation-needed.springer.com/v2/references/%s?format=bibtex&flavour=citation");
-
-    /**
-     *
-     * @param value
-     * @return
-     */
-    public static DigitalLibraries getEnum(String value) {
-        for (DigitalLibraries v : values()) {
-            if (Objects.equals(v.getValue(), value)) {
-                return v;
-            }
-        }
-        throw new IllegalArgumentException();
+    SPRINGERLINK("SpringerLink") {
+		@Override
+		public Library getInstance() {
+			return new SpringerLink();
+		}
+	};
+	
+    public static DigitalLibraries getDigitalLibrary(String value) {
+    	return Arrays.asList(values())
+    			.stream()
+    			.filter(item -> StringUtils.equalsIgnoreCase(item.value, value))
+    			.findFirst()
+    			.get();
     }
 
     private final String value;
-    private final String url;
-
-    DigitalLibraries(String value, String url) {
+    
+    public abstract Library getInstance();
+    
+    DigitalLibraries(String value) {
         this.value = value;
-        this.url = url;
-    }
-
-    /**
-     * Digital Library Name
-     *
-     * @return name
-     */
-    public String getValue() {
-        return value;
-    }
-
-    /**
-     * Digital Library Url
-     *
-     * @return url
-     */
-    public String getUrl() {
-        return url;
     }
 
     @Override
     public String toString() {
-        return this.getValue();
+        return this.value;
     }
 
 }

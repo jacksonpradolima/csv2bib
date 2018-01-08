@@ -17,28 +17,41 @@
 package jacksonpradolima.csv2bib;
 
 import java.io.IOException;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import java.io.UncheckedIOException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import jacksonpradolima.csv2bib.runner.Run;
+import jacksonpradolima.csv2bib.runner.RunByArgs;
+import jacksonpradolima.csv2bib.runner.RunByProperties;
 
 /**
+ * Class to parse csv file to bib file using DOI as key to get bibtex
+ * informations.
  *
  * @author Jackson A. Prado Lima <jacksonpradolima at gmail.com>
+ * 
+ * @author Fernando S. Godóy <fernandogodot18@gmail.com>
  */
-public class RunTest {
+public class Main {
 
-    public RunTest() {
-    }
+	/**
+	 * Logger
+	 */
+	private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
-    @Test
-    public void testSomeMethod() {
-        String[] args = new String[]{"-fi=src/test/resources/SpringerLink.csv", "-dl=SpringerLink", "-doiIndex=5"};
-        try {
-            Main.main(args);
-            assertTrue(true);
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-            assertTrue(false);
-        }
-    }
+	public static void main(String[] args) throws IOException, InterruptedException {
+
+		try {
+			Run run = args.length > 0 ? new RunByArgs(args) : new RunByProperties();
+			run.run();
+
+		} catch (UncheckedIOException e) {
+			logger.error("Error when tried to read the csv file.", e);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+		}
+	}
 
 }
