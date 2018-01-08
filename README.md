@@ -40,9 +40,11 @@ where you must change *version* with the a version available
 
 **-dl**: Digital Library that the system will get the bibtex informations. (required)
 
-**-doiIndex**: DOI index in the csv file. Starting with 0 (first column). (required)
+**-doiIndex**: DOI index in the csv file. Starting with 0 (first column). If the value is empty, the index is search in csv file (optional)
 
 **-header**: If the csv contains a header. (optional, default 1)
+
+**-extension**: Extension for exporter references, can use (bib or ris). (optional, default bib) 
 
 ## Digital Libraries available
 - DOI (Get the bibtex informations using crossref - this option is not so recommended)
