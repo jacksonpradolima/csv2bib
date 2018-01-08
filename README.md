@@ -21,7 +21,7 @@ java -jar csv2bib-version -fi=src/test/resources/SpringerLink.csv -dl=SpringerLi
 
 ## Running with properties parameters
 
-1. Access and edit the config.properties file
+1. Access and edit the config file (https://github.com/fernandogodoy/csv2bib/blob/master/csv2bib/config.properties)
 2. Make the command
 
 ```
