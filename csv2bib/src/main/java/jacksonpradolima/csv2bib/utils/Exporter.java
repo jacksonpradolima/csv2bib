@@ -5,8 +5,10 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +45,13 @@ public interface Exporter {
 	 * @return
 	 */
 	List<String> getUrls();
+	
+	/**
+	 * Get Extension for file exporter
+	 * 
+	 * @return
+	 */
+	Extension getExtension();
 
 	/**
 	 * Execute the extract references from Digital library
@@ -51,6 +60,16 @@ public interface Exporter {
 	 * @return
 	 */
 	List<String> execute(List<String> urls);
+	
+	
+	/**
+	 * File for write results
+	 * 
+	 * @return
+	 */
+	default String toFileName() {
+		return FilenameUtils.getBaseName(getOutputFile().toString() + getExtension().getFormat());
+	}
 
 	/**
 	 * Write file
@@ -59,7 +78,7 @@ public interface Exporter {
 	 */
 	default void write() throws IOException {
 		LOGGER.info("File generated in: " + getOutputFile());
-		Files.write(getOutputFile(), execute(getUrls()), StandardCharsets.UTF_8);
+		Files.write(Paths.get(toFileName()), execute(getUrls()), StandardCharsets.UTF_8);
 	}
 
 }

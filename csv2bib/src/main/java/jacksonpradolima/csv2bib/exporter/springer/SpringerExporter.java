@@ -39,7 +39,7 @@ public interface SpringerExporter  extends Exporter{
                 .start()
                 .maxHint(urls.size());
 
-        List<String> bibs = new ArrayList<>();
+        List<String> refs = new ArrayList<>();
 
         URL uri;
         for (String strUrl : urls) {
@@ -49,17 +49,16 @@ public interface SpringerExporter  extends Exporter{
 
                 try (BufferedReader in = new BufferedReader(new java.io.InputStreamReader(ec.getInputStream(), ENCODING))) {
 
-                    StringBuilder a = new StringBuilder();
-                    String inputLine;
-                    while ((inputLine = in.readLine()) != null) {
-                        a.append(inputLine).append("\n");
+                    StringBuilder refBuilder = new StringBuilder();
+                    String ref;
+                    while ((ref = in.readLine()) != null) {
+                        refBuilder.append(ref).append("\n");
                     }
-                    LOGGER.debug(a.toString());
-                    bibs.add(a.toString());
+                    LOGGER.debug(refBuilder.toString());
+                    refs.add(refBuilder.toString());
                 } catch (IOException ex) {
                     throw ex;
                 }
-
                 pb.step();
                 message(pb);
             } catch (MalformedURLException ex) {
@@ -70,7 +69,7 @@ public interface SpringerExporter  extends Exporter{
         }
 
         pb.stop();
-        return bibs;
+        return refs;
     }
 	
 }

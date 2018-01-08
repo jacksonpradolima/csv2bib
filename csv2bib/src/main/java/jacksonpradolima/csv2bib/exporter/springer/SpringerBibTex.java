@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
 
+import jacksonpradolima.csv2bib.utils.Extension;
 import me.tongfei.progressbar.ProgressBar;
 
 /**
@@ -37,9 +38,9 @@ public class SpringerBibTex implements SpringerExporter {
 	
 	private List<String> urls;
 
-	public SpringerBibTex(String outputFolder, List<String> urls) {
+	public SpringerBibTex(String outputFile, List<String> urls) {
 		this.urls = urls;
-		this.outputFile = FilenameUtils.getBaseName(Paths.get(outputFolder).toString()) + ".bib";
+		this.outputFile = FilenameUtils.getBaseName(Paths.get(outputFile).toString());
 	}
 
 	@Override
@@ -50,6 +51,11 @@ public class SpringerBibTex implements SpringerExporter {
 	@Override
 	public List<String> getUrls() {
 		return urls;
+	}
+	
+	@Override
+	public Extension getExtension() {
+		return  Extension.BIB;
 	}
 
 	@Override

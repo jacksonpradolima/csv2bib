@@ -4,6 +4,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import org.apache.commons.io.FilenameUtils;
+
+import jacksonpradolima.csv2bib.utils.Extension;
 import me.tongfei.progressbar.ProgressBar;
 
 /**
@@ -18,8 +21,8 @@ public class SpringerRis implements SpringerExporter {
 	private List<String> urls;
 
 	public SpringerRis(String outputFile, List<String> urls) {
-		this.outputFile = outputFile;
 		this.urls = urls;
+		this.outputFile = FilenameUtils.getBaseName(Paths.get(outputFile).toString());
 	}
 
 	@Override
@@ -35,6 +38,11 @@ public class SpringerRis implements SpringerExporter {
 	@Override
 	public void message(ProgressBar pb) {
 		pb.setExtraMessage("Getting RIS informations...");
+	}
+
+	@Override
+	public Extension getExtension() {
+		return Extension.RIS;
 	}
 
 }

@@ -49,7 +49,7 @@ public class CsvExecutor implements Executor{
 			Exporter exporter = factory.createrExporter();
 			exporter.write();
 		} catch (Exception e) {
-			LOGGER.error("Error in to generate .bib file.", e);
+			LOGGER.error("Error in to generate " + fileExtension +" file.", e);
 		}
 	}
 
