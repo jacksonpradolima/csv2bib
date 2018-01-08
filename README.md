@@ -16,7 +16,7 @@ In some digital libraries, for instance SpringerLink, the search results are ava
 
 ## Running with args in command line
 ```
-java -jar csv2bib-version -fi=src/test/resources/SpringerLink.csv -dl=SpringerLink -doiIndex=5
+java -jar csv2bib-version -fi=src/test/resources/SpringerLink.csv -dl=SpringerLink -doiIndex=5 -extension=bib
 ```
 
 ## Running with properties parameters
