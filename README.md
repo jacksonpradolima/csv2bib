@@ -1,7 +1,7 @@
 # csv2bib
 In some digital libraries, for instance SpringerLink, the search results are available only in .csv format, but the researchers needs in other formats like bibtex. In this sense, this project was created to help the researchers converting csv files into a bib or ris file.
 
-[![Gittip](https://img.shields.io/badge/Latest%20stable-2.0-green.svg?style=flat-squared)]()
+[![Gittip](https://img.shields.io/badge/Latest%20stable-2.1-green.svg?style=flat-squared)]()
 [![Gittip](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
 
 # Requirements
