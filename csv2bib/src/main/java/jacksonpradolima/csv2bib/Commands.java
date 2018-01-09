@@ -24,7 +24,7 @@ import com.beust.jcommander.Parameters;
  * @author Jackson A. Prado Lima <jacksonpradolima at gmail.com>
  */
 @Parameters(separators = " =")
-public class RunCommands {
+public class Commands {
 
     @Parameter(names = {"-help", "-h"}, help = true)
     public boolean help;
@@ -40,4 +40,7 @@ public class RunCommands {
 
     @Parameter(names = {"-header"}, description = "Contains header?", arity = 1)
     public boolean header;
+    
+    @Parameter(names = {"-extension"}, description = "Extension for file export")
+    public String extension;
 }
