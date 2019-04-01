@@ -11,25 +11,24 @@ In some digital libraries, for instance SpringerLink, the search results are ava
 
 # How do I start?
 
-1. Dowload the last release;
-2. Make the command:
+1. Download the last release
+2. Run the command
+```bash
+mvn clean install
+```
 
 ## Running with args in command line
 ```
-java -jar csv2bib-version -fi=src/test/resources/SpringerLink.csv -dl=SpringerLink -doiIndex=5 -extension=bib
+java -jar target/csv2bib-2.1-jar-with-dependencies.jar -fi=src/test/resources/SpringerLink.csv -dl=SpringerLink -doiIndex=5 -extension=bib
 ```
 
 ## Running with properties parameters
 
-1. Access and edit the config file [config.properties](https://github.com/fernandogodoy/csv2bib/blob/master/csv2bib/config.properties)
-2. Make the command
-
+1. Edit the config file [config.properties](config.properties)
+2. Run the command
+```bash
+java -jar target/csv2bib-2.1-jar-with-dependencies.jar 
 ```
-java -jar csv2bib-version
-```
-
-
-where you must change *version* with the a version available
  
  # Tips
 ## About the parameters
