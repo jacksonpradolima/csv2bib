@@ -5,6 +5,20 @@ In some digital libraries, for instance SpringerLink, the search results are ava
 [![Build Status](https://travis-ci.org/jacksonpradolima/csv2bib.svg?branch=master)](https://travis-ci.org/jacksonpradolima/csv2bib)
 [![DOI](https://zenodo.org/badge/93668849.svg)](https://zenodo.org/badge/latestdoi/93668849)
 
+# Citation
+
+If this package contributes to a project which leads to a scientific publication, I would appreciate a citation.
+
+```
+@misc{pradolima_csv2bib,
+  author       = {Prado Lima, Jackson Antonio do},
+  title        = {{csv2bib - Converting search results from some Digital Library}},
+  month        = jul,
+  year         = 2019,
+  doi          = {10.5281/zenodo.3272139},
+  url          = {https://doi.org/10.5281/zenodo.3272139}
+}
+```
 
 # Requirements
 
@@ -50,3 +64,5 @@ where you must change *version* with the a version available
 
 ## Digital Libraries available
 - SpringerLink
+
+
