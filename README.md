@@ -3,6 +3,8 @@ In some digital libraries, for instance SpringerLink, the search results are ava
 
 [![Gittip](https://img.shields.io/badge/Latest%20stable-2.1-green.svg?style=flat-squared)]()
 [![Build Status](https://travis-ci.org/jacksonpradolima/csv2bib.svg?branch=master)](https://travis-ci.org/jacksonpradolima/csv2bib)
+[![DOI](https://zenodo.org/badge/93668849.svg)](https://zenodo.org/badge/latestdoi/93668849)
+
 
 # Requirements
 
