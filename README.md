@@ -11,7 +11,7 @@ If this package contributes to a project which leads to a scientific publication
 
 ```
 @misc{pradolima_csv2bib,
-  author       = {Prado Lima, Jackson Antonio do},
+  author       = {Prado Lima, Jackson Antonio do and Godóy, Fernando},
   title        = {{csv2bib - Converting search results from some Digital Library}},
   month        = jul,
   year         = 2019,
