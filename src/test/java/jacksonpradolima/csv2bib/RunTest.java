@@ -26,12 +26,25 @@ import static org.junit.Assert.*;
  */
 public class RunTest {
 
+    private String file_input;
+    private String digital_library;
+    private String doi_index;
+    
     public RunTest() {
+        file_input = "src/test/resources/SpringerLink.csv";
+        digital_library = "SpringerLink";
+        doi_index = "5";
     }
 
     @Test
-    public void testSomeMethod() {
-        String[] args = new String[]{"-fi=src/test/resources/SpringerLink.csv", "-dl=SpringerLink", "-doiIndex=5"};
+    public void testSomeMethod() {        
+        String[] args = new String[]
+        {
+            "-fi="+file_input, 
+            "-dl="+ digital_library, 
+            "-doiIndex=" + doi_index
+        };
+        
         try {
             Main.main(args);
             assertTrue(true);
